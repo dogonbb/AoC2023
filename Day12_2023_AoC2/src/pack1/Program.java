@@ -32,7 +32,7 @@ public class Program {
 		////////////////////////////////////////////
 
 		// speichern String von Fragezeichen in List
-		int ergebnis = 0; 
+		int ergebnis = 0;
 		for (String s : input) {
 			String[] zahlenString;
 			int a = 0;
@@ -65,71 +65,89 @@ public class Program {
 			}
 			stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + zahlen[zahlen.length - 1] - 1;
 			System.out.println(toEdit.length());
+			
 			whileloop: while (true) {
 //				TimeUnit.SECONDS.sleep(2);
-				while (stellen[stellen.length - 1][1] != toEdit.length() - 1) {
-					for (int k = 0; k < 2; k++) {
-						
-
-						stellen[stellen.length - 1][k]++;
-
+				
+				//letztes Intervall solange nach rechts verschieben bis es ganz außer angekommen ist
+				
+				//wenn ganz rechts außen angekommen dann nach links suchen, für das nächste intervall 
+				//wenn das andere Intervall schon direkt dran -> hinter diesem Intervall weiter suchen 
+				//solange bis ein Intervall gefunden wurde, was nicht ganz rechts ist 							oder man bei 0 ankommt
+				//alle Intervalle die ganz rechts sind nach links wieder anschließen							return; 
+				
+				
+				// wenn alle intervalle aneinander anschließen und bis zum ende durchgehen ->
+				// break whileloop;
+				for (int i = 0; i < stellen.length - 1; i++) {
+					if (stellen[i][1] != stellen[i + 1][0] - 1) {
+						break;
 					}
-					if(ergibtSinn(stellen, toEdit)) {
-						ergebnis++; 
+					if (i == stellen.length - 2 && toEdit.length() - 1 == stellen[i + 1][1]) {
+						break whileloop;
 					}
 				}
 
-				//wenn alle intervalle aneinander anschließen und bis zum ende durchgehen -> break whileloop; 
 				
-				out: for (int i = 0; i < stellen.length - 1; i++) {
-					if (stellen[i][1] != stellen[i + 1][0]) {
-						for (int k = 0; k < 2; k++) {
-							stellen[i][k]++;
-							 
-						}
-						break out; //sobald eins gefunden wurde soll rausgegangen werden, wenn kein gefuden wird:
-					}
-					
-				}
-				
-				//get the last thing back
-				int temp = stellen[stellen.length - 1][1] - stellen[stellen.length - 1][0];
-				stellen[stellen.length - 1][0] = stellen[stellen.length - 2][1] /*+1 möglich, weil es immer einen entfernt sein muss*/;
-				stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + temp;
-
+			
 			}
-
 		}
-System.out.println(ergebnis);
+		System.out.println("Ergebnis: " + ergebnis);
 	}
-
-	static boolean ergibtSinn(int[][] stellen, String s) {
-		//hier prüfen ob die reihenfolge möglich
-		//wenn alle # im String s auch noch # in stellen ist (die Werte in Stellen sind #, als start und end)
-		out: for(int i = 0; i< s.length(); i++) {
+	
+	
+	
+	static boolean ergibtSinn(int[][] stellen, String s, int mengeZahlen) {
+		//über keinen Punkt
+		for(int i[] : stellen) {
+			for(int j : i) {
+				if(s.charAt(j) == '.') {
+					return false; 
+				}
+			}
+		}
+		//alle # werden abgedeckt
+		for(int i = 0; i < s.length(); i++) {
 			if(s.charAt(i) == '#') {
-				for(int j[] : stellen) {
-					if(j[0] <= i && j[1] >= i) {
-						break out; 
+				for(int j = 0; j < stellen.length; j++) {
+					if(stellen[j][0] <= i && stellen[j][1] >= i) {
+						break; 
 					}
-					if(j[1] == stellen[stellen.length - 1][1]) { //letztes element geprüft aber noch nicht gebreakt
+					if(j==stellen.length - 1) {
 						return false; 
 					}
 				}
 			}
-			
 		}
-		//wenn alle Stellen einen auseinander liegen
-		for(int i = 0; i < stellen.length - 1; i++) {
-			if(stellen[i][1] + 1 == stellen[i+1][0]) {
-				return false; 
+		//alle stellen die in Intervall sind durch # austauschen
+		StringBuilder stringBuilder = new StringBuilder(s);
+		for(int i = 0; i < stellen.length; i++) {
+			for(int j = 0; j < stellen[i].length; j++) {
+				stringBuilder.setCharAt(stellen[i][j], '#');
 			}
 		}
-		//jeder andere fall nicht!!
-		for (int i[] : stellen) {
-			System.out.println(Arrays.toString(i));
+		
+		s = stringBuilder.toString(); 
+		
+		//gucken ob es geanuso viele "Inseln" von # gibt wie es geben soll (mengeZahlen)
+		int count = 0; 
+		for(int i = 0; i < s.length(); i++) {
+			if(s.charAt(i) == '#') {
+				int a = i; 
+				while(a < s.length() && s.charAt(a) == '#') {
+					a++; 
+				}
+				count++; 
+				i=a; 
+			}
 		}
+		if(count != mengeZahlen)  {
+			return false; 
+		}
+		
+	
+		
+		
 		return true;
 	}
 }
- 
