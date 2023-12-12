@@ -160,9 +160,7 @@ public class Program {
 																									// for large input
 																									// as the puzzle
 																									// input
-																									// have to implement
-																									// itearative
-																									// version
+																									
 		char feldChar = input[y].charAt(x);
 		LinkedList<Point> possibleVisitPoints = new LinkedList<>();
 
