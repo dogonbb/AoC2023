@@ -32,14 +32,15 @@ public class Program {
 		////////////////////////////////////////////
 
 		// speichern String von Fragezeichen in List
-
+		int ergebnis = 0; 
 		for (String s : input) {
 			String[] zahlenString;
 			int a = 0;
 			String toEdit = new String("");
-			for (int i = 0; i < s.length(); i++) { 	toEdit += s.charAt(i);// erkennen der Zahlen
+			for (int i = 0; i < s.length(); i++) {
+				toEdit += s.charAt(i);// erkennen der Zahlen
 				if (s.charAt(i + 1) == ' ') {
-				
+
 					a = i + 1;
 					break;
 				}
@@ -64,41 +65,71 @@ public class Program {
 			}
 			stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + zahlen[zahlen.length - 1] - 1;
 			System.out.println(toEdit.length());
-			while (true) {
-				TimeUnit.SECONDS.sleep(2);
+			whileloop: while (true) {
+//				TimeUnit.SECONDS.sleep(2);
 				while (stellen[stellen.length - 1][1] != toEdit.length() - 1) {
 					for (int k = 0; k < 2; k++) {
-						System.out.println(1);
 						
+
 						stellen[stellen.length - 1][k]++;
-						
+
 					}
-ergibtSinn(stellen); 
+					if(ergibtSinn(stellen, toEdit)) {
+						ergebnis++; 
+					}
 				}
+
+				//wenn alle intervalle aneinander anschließen und bis zum ende durchgehen -> break whileloop; 
 				
-				
-				for(int i = 0; i < stellen.length - 1; i++) {
-					if(stellen[i][1] != stellen[i+1][0]) {
+				out: for (int i = 0; i < stellen.length - 1; i++) {
+					if (stellen[i][1] != stellen[i + 1][0]) {
 						for (int k = 0; k < 2; k++) {
 							stellen[i][k]++;
-							
+							 
 						}
+						break out; //sobald eins gefunden wurde soll rausgegangen werden, wenn kein gefuden wird:
 					}
+					
 				}
-				int temp = stellen[stellen.length - 1][1] - stellen[stellen.length - 1][0]; 
-				stellen[stellen.length - 1][0] = stellen[stellen.length - 2][1] + 1; 
-				stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + temp; 
+				
+				//get the last thing back
+				int temp = stellen[stellen.length - 1][1] - stellen[stellen.length - 1][0];
+				stellen[stellen.length - 1][0] = stellen[stellen.length - 2][1] /*+1 möglich, weil es immer einen entfernt sein muss*/;
+				stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + temp;
 
 			}
 
 		}
-
+System.out.println(ergebnis);
 	}
-	
-	static boolean ergibtSinn(int[][] stellen) {
-		for(int i[] : stellen) {
-		System.out.println(Arrays.toString(i));
+
+	static boolean ergibtSinn(int[][] stellen, String s) {
+		//hier prüfen ob die reihenfolge möglich
+		//wenn alle # im String s auch noch # in stellen ist (die Werte in Stellen sind #, als start und end)
+		out: for(int i = 0; i< s.length(); i++) {
+			if(s.charAt(i) == '#') {
+				for(int j[] : stellen) {
+					if(j[0] <= i && j[1] >= i) {
+						break out; 
+					}
+					if(j[1] == stellen[stellen.length - 1][1]) { //letztes element geprüft aber noch nicht gebreakt
+						return false; 
+					}
+				}
+			}
+			
 		}
-		return false; 
+		//wenn alle Stellen einen auseinander liegen
+		for(int i = 0; i < stellen.length - 1; i++) {
+			if(stellen[i][1] + 1 == stellen[i+1][0]) {
+				return false; 
+			}
+		}
+		//jeder andere fall nicht!!
+		for (int i[] : stellen) {
+			System.out.println(Arrays.toString(i));
+		}
+		return true;
 	}
 }
+ 
