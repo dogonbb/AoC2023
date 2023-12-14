@@ -67,7 +67,6 @@ public class Program {
 			for(int j = y - 1; j <= y + 1; j++) {
 				System.out.println("prüfe: " + i + " " + j);
 				if(i > 0 && i < input[0].length() && j > 0 && j < input.length &&  input[j].charAt(i) != '.' && !Character.isDigit(input[j].charAt(i)) ) {
-					System.out.println("TRUE");
 					return true; 
 				}
 			}

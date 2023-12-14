@@ -89,7 +89,6 @@ public class Program {
 						}
 					}
 				}
-
 			}
 			for (int i = s.length() - 1; i >= 0; i--) {
 				if (Character.isDigit(s.charAt(i))) {

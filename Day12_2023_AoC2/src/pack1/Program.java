@@ -64,40 +64,78 @@ public class Program {
 				stellen[i][1] = stellen[i + 1][0] - 1;
 			}
 			stellen[stellen.length - 1][1] = stellen[stellen.length - 1][0] + zahlen[zahlen.length - 1] - 1;
-			System.out.println(toEdit.length());
 			
-			whileloop: while (true) {
-//				TimeUnit.SECONDS.sleep(2);
+			int pos = stellen.length - 2;
+			
+			whileloop: while(true) {
 				
-				//letztes Intervall solange nach rechts verschieben bis es ganz außer angekommen ist
-				
-				//wenn ganz rechts außen angekommen dann nach links suchen, für das nächste intervall 
-				//wenn das andere Intervall schon direkt dran -> hinter diesem Intervall weiter suchen 
-				//solange bis ein Intervall gefunden wurde, was nicht ganz rechts ist 							oder man bei 0 ankommt
-				//alle Intervalle die ganz rechts sind nach links wieder anschließen							return; 
-				
-				
-				// wenn alle intervalle aneinander anschließen und bis zum ende durchgehen ->
-				// break whileloop;
-				for (int i = 0; i < stellen.length - 1; i++) {
-					if (stellen[i][1] != stellen[i + 1][0] - 1) {
-						break;
+				if(stellen[stellen.length - 1][1] < toEdit.length() - 1) {
+					for(int i = 0; i < 2; i++) {
+						stellen[stellen.length - 1][i]++; 
 					}
-					if (i == stellen.length - 2 && toEdit.length() - 1 == stellen[i + 1][1]) {
-						break whileloop;
+					if(ergibtSinn(stellen, toEdit, zahlen.length)) {
+						ergebnis++; 
 					}
+				}else {
+					if(stellen[pos][1] < toEdit.length() - 1) {
+						pos = pos; 
+					}else {
+						if(pos == 0) break whileloop; 
+						pos--; 
+					}
+					for(int i = 0; i < 2; i++) {
+						stellen[pos][i]++; 
+						
+					}
+					
+					if(ergibtSinn(stellen, toEdit, zahlen.length)) {
+						ergebnis++; 
+					}
+					
+					for(int i = pos + 1; i < stellen.length; i++) {
+						int range = stellen[i][1] -stellen[i][0]; 
+						stellen[i][0]=0; 
+						stellen[i][1]=range; 
+					}
+					pos = stellen.length-2; 
+					 
+					
 				}
-
-				
-			
+				for(int i[] : stellen) {
+					System.out.println(Arrays.toString(i));
+				}
+				System.out.println();
 			}
+		
 		}
 		System.out.println("Ergebnis: " + ergebnis);
 	}
 	
-	
+
 	
 	static boolean ergibtSinn(int[][] stellen, String s, int mengeZahlen) {
+		//wenn i < j raus
+		for(int i = 0; i < stellen.length; i++) {
+			for(int j = 0; j < stellen.length; j++) {
+				if(stellen[i][0] < stellen[j][0] && j > i) {
+					return false; 
+				}
+			}
+		}
+		
+		
+		//überschneiden direkt raus 
+		for(int i = 0; i < stellen.length; i++) {
+			for(int j = 0; j < stellen.length; j++) {
+				if(stellen[i][0] >= stellen[j][0] && stellen[i][0] <= stellen[j][1] ) {
+					return false; 
+				}
+			}
+		}
+		
+		
+		
+		
 		//über keinen Punkt
 		for(int i[] : stellen) {
 			for(int j : i) {
