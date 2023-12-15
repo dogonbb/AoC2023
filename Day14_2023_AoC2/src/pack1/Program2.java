@@ -37,17 +37,14 @@ public class Program2 {
 		}
 
 		System.out.println();
-		printArray(inputChar);
-		// north rotation
+	
+		
 		char[][] inputCharStart = new char[inputChar.length][inputChar[0].length];
-		for(int i = 0; i < inputChar.length; i++) {
-			for(int j = 0; j < inputChar[0].length; j++) {
-				inputCharStart[i][j] = inputChar[i][j]; 
-			}
-		}
+		
 
 		System.out.println(compare_two_felder(inputChar, inputCharStart));
 		int repeat = 0; 
+		System.out.println();
 		do {
 		repeat++;
 		for (int k = 0; k < input.length; k++) {
@@ -62,7 +59,17 @@ public class Program2 {
 				}
 			}
 		}
-		if(compare_two_felder(inputChar, inputCharStart)) break;
+		if(repeat == 1) {
+			for(int i = 0; i < inputChar.length; i++) {
+				for(int j = 0; j < inputChar[0].length; j++) {
+					inputCharStart[i][j] = inputChar[i][j]; 
+				}
+			}
+		}else if(compare_two_felder(inputChar, inputCharStart) ){
+			System.out.println("gdifjghpfgihjpifg");
+			break; 
+		}
+	
 
 		// west
 		for (int k = 0; k < input.length; k++) {
@@ -77,7 +84,7 @@ public class Program2 {
 				}
 			}
 		}
-		if(compare_two_felder(inputChar, inputCharStart)) break;
+		
 
 		// south
 		for (int k = 0; k < input.length; k++) {
@@ -92,7 +99,7 @@ public class Program2 {
 				}
 			}
 		}
-		if(compare_two_felder(inputChar, inputCharStart)) break;
+	
 		// east
 		for (int k = 0; k < input.length; k++) {
 			for (int i = 0; i < inputChar.length; i++) {
@@ -107,15 +114,12 @@ public class Program2 {
 			}
 		}
 		
-		if(repeat%500==0) System.out.println(repeat);
-		printArray(inputCharStart);
-		System.out.println();
-		printArray(inputChar);
-		System.out.println();
-		System.out.println();
-		Thread.sleep(1000);
+	
+		
+//		Thread.sleep(1000);
 		}while(!compare_two_felder(inputChar, inputCharStart));
 		System.out.println(repeat);
+	
 		// ergebnis berechnen
 		int counter = 1;
 		for (int i = inputChar.length - 1; i >= 0; i--) {
