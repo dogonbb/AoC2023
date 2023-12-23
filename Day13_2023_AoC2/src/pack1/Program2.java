@@ -17,7 +17,7 @@ public class Program2 {
 			count++;
 		}
 		input = new String[count /* added this, just for this day: */ + 1];
-		/* and this: */input[input.length - 1] = "9gidhfihgfdg0ßh"; // so i can parse input more easy :)
+		/* and this: */input[input.length - 1] = "9gidhfihgfdg0ßh"; // so i can parse input easier
 		count = 0;
 		br = new BufferedReader(new FileReader("input.txt"));
 		while ((st = br.readLine()) != null) {
@@ -29,7 +29,6 @@ public class Program2 {
 
 		// ein Feld einlesen
 		int start = 0;
-		int counter = 0;
 		int ergebnis = 0;
 		for (int i = 0; i < input.length; i++) {
 			String[] input2;
@@ -39,48 +38,138 @@ public class Program2 {
 				input2 = new String[i - start];
 				System.arraycopy(input, start, input2, 0, i - start);
 				start = i + 1;
-
+				int zwischenErgebnis = 0;
 				// vertical proof:
 				// immer linke (a = i)und rechts (b = i+1)zeile in String
-				
-				//solving part2 through bruteforce
-				int ergebnisVorher = compare(input2); 
-				System.out.println(ergebnisVorher);
-				out: for(int j = 0; j < input2.length; j++) {
-					for(int k = 0; k < input2[0].length(); k++) {
-						if(input2[j].charAt(k) == '.')  {
-							StringBuilder str = new StringBuilder(input2[j]); 
-							str.setCharAt(k, '#');
-							input2[j] = str.toString(); 
-							int neu = compare(input2); 
-							if(neu != -1 && neu != ergebnisVorher) {
-								System.out.println(neu);
-								ergebnis+= neu; 
-								break out; 
-							}
-							str.setCharAt(k, '.');
-							input2[j] = str.toString();
-						}else {
-						
-							StringBuilder str = new StringBuilder(input2[j]); 
-							str.setCharAt(k, '.');
-							input2[j] = str.toString(); 
-							if(j == 0)
-								System.out.println(Arrays.toString(input2));
-							int neu = compare(input2); 
-							System.out.println(neu);
-							if(neu != -1 && neu != ergebnisVorher) {
-								System.out.println(neu);
-								ergebnis+= neu; 
-								break out; 
-							}
-							str.setCharAt(k, '#');
-							input2[j] = str.toString();
+				boolean hinzugefügt = false;
+				for (int j = 0; j < input2[0].length() - 1; j++) {
+					String string1 = "";
+					String string2 = "";
+
+					int a = j, b = j + 1;
+					while (true) {
+						for (int k = 0; k < input2.length; k++) {
+							string1 += input2[k].charAt(a);
+							string2 += input2[k].charAt(b);
 						}
-						
+						if (!string1.equals(string2)) {
+							break;
+						}
+						if (a == 0 || b == input2[0].length() - 1) {
+							zwischenErgebnis = j + 1;
+							hinzugefügt = true;
+							break;
+						}
+						a--;
+						b++;
+
 					}
 				}
+				if (!hinzugefügt) {
+					for (int j = 0; j < input2.length - 1; j++) {
+						String string1, string2;
 
+						int a = j, b = j + 1;
+						while (true) {
+							string1 = input2[a];
+							string2 = input2[b];
+							if (!string1.equals(string2)) {
+								break;
+							}
+							if (a == 0 || b == input2.length - 1) {
+								zwischenErgebnis = (j + 1) * 100;
+								;
+
+								break;
+							}
+							a--;
+							b++;
+						}
+					}
+
+				}
+				// bruteforcing part 2:
+				outest: for (int h = 0; h < input2.length; h++) {
+					for (int l = 0; l < input2[0].length(); l++) {
+						// change input:
+						if (input2[h].charAt(l) == '.') {
+
+							StringBuilder strb = new StringBuilder(input2[h]);
+							strb.setCharAt(l, '#');
+							input2[h] = strb.toString();
+						} else {
+							StringBuilder strb = new StringBuilder(input2[h]);
+							strb.setCharAt(l, '.');
+							input2[h] = strb.toString();
+						}
+
+						hinzugefügt = false;
+						for (int j = 0; j < input2[0].length() - 1; j++) {
+							String string1 = "";
+							String string2 = "";
+
+							int a = j, b = j + 1;
+							while (true) {
+								for (int k = 0; k < input2.length; k++) {
+									string1 += input2[k].charAt(a);
+									string2 += input2[k].charAt(b);
+								}
+								if (!string1.equals(string2)) {
+									break;
+								}
+								if (a == 0 || b == input2[0].length() - 1) {
+									if (zwischenErgebnis != j + 1) {
+										ergebnis += j + 1;
+										hinzugefügt = true;
+										break outest;
+										
+									}
+									break;
+									
+								}
+								a--;
+								b++;
+
+							}
+						}
+						if (!hinzugefügt) {
+							for (int j = 0; j < input2.length - 1; j++) {
+								String string1, string2;
+
+								int a = j, b = j + 1;
+								while (true) {
+									string1 = input2[a];
+									string2 = input2[b];
+									if (!string1.equals(string2)) {
+										break;
+									}
+									if (a == 0 || b == input2.length - 1) {
+										if (zwischenErgebnis != (j + 1) * 100) {
+											ergebnis += (j + 1) * 100;
+											break outest; 
+										}
+										break;
+										
+									}
+									a--;
+									b++;
+								}
+							}
+						}
+						// input zurück changen
+						if (input2[h].charAt(l) == '.') {
+
+							StringBuilder strb = new StringBuilder(input2[h]);
+							strb.setCharAt(l, '#');
+							input2[h] = strb.toString();
+						} else {
+							StringBuilder strb = new StringBuilder(input2[h]);
+							strb.setCharAt(l, '.');
+							input2[h] = strb.toString();
+						}
+
+					}
+				}
 			}
 
 		}
@@ -89,55 +178,5 @@ public class Program2 {
 	}
 
 	// fucntion to compare to Strings:
-	static int compare(String input2[]) {
-		boolean hinzugefügt = false;
-		for (int j = 0; j < input2[0].length() - 1; j++) {
-			String string1 = "";
-			String string2 = "";
 
-			int a = j, b = j + 1;
-			while (true) {
-				for (int k = 0; k < input2.length; k++) {
-					string1 += input2[k].charAt(a);
-					string2 += input2[k].charAt(b);
-				}
-				if (!string1.equals(string2)) {
-					break;
-				}
-				if (a == 0 || b == input2[0].length() - 1) {
-					return j + 1;
-				
-				
-				}
-				a--;
-				b++;
-
-			}
-		}
-		if (!hinzugefügt) {
-			for (int j = 0; j < input2.length - 1; j++) {
-				String string1, string2;
-
-				int a = j, b = j + 1;
-				while (true) {
-					string1 = input2[a];
-					string2 = input2[b];
-					if (!string1.equals(string2)) {
-						break;
-					}
-					if (a == 0 || b == input2.length - 1) {
-						return (j + 1) * 100;
-						
-
-						
-					}
-					a--;
-					b++;
-				}
-			}
-
-		}
-		return -1; //errorvalue
-	}
-	
 }

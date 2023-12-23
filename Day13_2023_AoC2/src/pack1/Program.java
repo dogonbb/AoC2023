@@ -17,7 +17,7 @@ public class Program {
 			count++;
 		}
 		input = new String[count /* added this, just for this day: */ + 1];
-		/* and this: */input[input.length - 1] = "9gidhfihgfdg0ßh"; // so i can parse input more easy :)
+		/* and this: */input[input.length - 1] = "9gidhfihgfdg0ßh"; // so i can parse input easier
 		count = 0;
 		br = new BufferedReader(new FileReader("input.txt"));
 		while ((st = br.readLine()) != null) {
@@ -29,7 +29,6 @@ public class Program {
 
 		// ein Feld einlesen
 		int start = 0;
-		int counter = 0;
 		int ergebnis = 0;
 		for (int i = 0; i < input.length; i++) {
 			String[] input2;
