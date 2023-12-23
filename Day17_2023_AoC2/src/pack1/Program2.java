@@ -162,7 +162,7 @@ public class Program2 {
 	}
 
 	static int getRangeInArray(int mat[][], int x1, int y1, int x2, int y2) { // parameter have to be: x1==x2||y1==y2 dann der andere parameter a1<a2
-		System.out.println(x1 + " " + x2 + " " + " "+ y1 + " " + y2);
+//		System.out.println(x1 + " " + x2 + " " + " "+ y1 + " " + y2);
 		int ergebnis = 0;
 		if (x1 == x2) {
 			for (int i = y1; i <= y2; i++) {
@@ -173,7 +173,7 @@ public class Program2 {
 				ergebnis += mat[y1][i];
 			}
 		}
-		System.out.println(ergebnis);
+//		System.out.println(ergebnis);
 		return ergebnis;
 	}
 
